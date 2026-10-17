@@ -1,26 +1,95 @@
 @import "tailwindcss";
 
+/* Fontes da marca (ficheiros em /public/fonts) */
+@font-face {
+  font-family: "Unbounded";
+  src: url("/fonts/Unbounded-VariableFont_wght.ttf") format("truetype");
+  font-weight: 200 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("/fonts/SourceSansPro-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Source Sans Pro";
+  src: url("/fonts/SourceSansPro-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Unscreen MK";
+  src: url("/fonts/UnscreenMK.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Tokens do design system Bizzi Vision */
+@theme {
+  --color-slate-50: #f1f4f5;
+  --color-slate-100: #dde3e6;
+  --color-slate-200: #bac6cb;
+  --color-slate-300: #95a6ad;
+  --color-slate-400: #7b8f97;
+  --color-slate-500: #627c85;
+  --color-slate-600: #506972;
+  --color-slate-700: #3e535b;
+  --color-slate-800: #2c3c43;
+  --color-slate-900: #1a252b;
+
+  --color-navy: #092038;
+  --color-navy-700: #0b2643;
+  --color-navy-500: #143055;
+
+  --color-yellow: #e6c229;
+  --color-yellow-50: #fff8dc;
+  --color-yellow-600: #c9a615;
+
+  --color-paper: #fafaf8;
+  --color-positive: #2f8f62;
+  --color-negative: #c0392b;
+
+  --font-display: "Unbounded", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
+  --font-wordmark: "Unscreen MK", "Unbounded", Arial, sans-serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-paper);
+  color: var(--color-navy);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+.bv-wordmark {
+  font-family: var(--font-wordmark);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.bv-eyebrow {
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-slate-600);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-slate-500);
+  outline-offset: 2px;
 }
