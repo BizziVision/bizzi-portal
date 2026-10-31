@@ -13,12 +13,28 @@ Portal em `portal.bizzi.vision`: Next.js (Vercel) + Supabase (UE, Frankfurt).
 - Base de dados com propostas, blocos (21 blocos base), proposta financeira, contratos,
   KPIs, tarefas visíveis, reports e auditoria.
 
+## Propostas (Fase 2)
+
+- **Biblioteca de blocos** (`/admin/blocos`): texto-base de cada bloco, com `{{campo}}` para valores
+  da proposta. Os blocos sem texto aparecem ao cliente só com o título.
+- **Construtor** (`/admin/propostas/[id]`), a partir da ficha do cliente → "Nova proposta":
+  começa com todos os blocos ativos; arrastar ou setas para reordenar; retirar e adicionar
+  (o bloco entra na sua secção); campos por bloco; resumo do investimento diário.
+- **Proposta financeira** (só Admin): plataformas e campanhas técnicas → fee pela tabela
+  (tier + 90 € por plataforma extra), fee manual opcional, setup e nota.
+- **Enviar ao cliente**: guarda uma fotografia do texto dos blocos e bloqueia a proposta.
+  "Voltar a rascunho" desbloqueia (só antes de o cliente aceitar).
+  O gestor não envia nem apaga propostas com a parte financeira.
+- **Cliente** (`/proposta/[id]`): lê a proposta; só o `cliente_admin` aceita (com confirmação);
+  o `cliente_leitor` não vê financeira nem condições. Ao aceitar, o cliente passa a Onboarding
+  e são criados os pedidos definidos nos blocos (acessos, dados de faturação, etc.).
+
 ## Configuração (uma vez)
 
 ### 1. Supabase
 1. Criar projeto em supabase.com, região **Central EU (Frankfurt)**.
 2. **SQL Editor** → correr, por ordem:
-   `supabase/migrations/0001_base.sql` e `supabase/migrations/0002_seed_blocks.sql`.
+   `supabase/migrations/0001_base.sql`, `0002_seed_blocks.sql` e `0003_propostas.sql`.
 3. **Authentication → Sign In / Providers**:
    - Email: ativo. **Desligar "Allow new users to sign up"** (só entra quem o admin aprova).
    - Email OTP length: 6. OTP expiry: 600 segundos.

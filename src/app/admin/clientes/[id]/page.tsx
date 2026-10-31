@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { requireStaff } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -26,6 +27,8 @@ import {
   setRequestStatusAction,
   updateClientAction,
 } from "../../actions";
+import { createProposalAction } from "../../propostas/actions";
+import { STATUS_LABEL, STATUS_TONE, type Proposal } from "@/lib/proposals";
 
 const REQUEST_STATUS = {
   pendente: { tone: "wait", label: "Em falta" },
@@ -49,9 +52,14 @@ export default async function ClientPage({
   if (!client) notFound();
   const c = client as Client;
 
-  const [{ data: users }, { data: requests }] = await Promise.all([
+  const [{ data: users }, { data: requests }, { data: proposals }] = await Promise.all([
     supabase.from("profiles").select("id, email, full_name, role, client_id").eq("client_id", id).order("email"),
     supabase.from("client_requests").select("*").eq("client_id", id).order("created_at", { ascending: false }),
+    supabase
+      .from("proposals")
+      .select("id, title, status, sent_at, accepted_at, created_at")
+      .eq("client_id", id)
+      .order("created_at", { ascending: false }),
   ]);
 
   const isAdmin = me.role === "admin";
@@ -68,6 +76,41 @@ export default async function ClientPage({
           {msg}
         </p>
       )}
+
+      <Card title="Propostas">
+        {!proposals || proposals.length === 0 ? (
+          <Empty>Ainda não há propostas para este cliente.</Empty>
+        ) : (
+          <ul className="divide-y divide-slate-50">
+            {(proposals as Proposal[]).map((p) => (
+              <li key={p.id} className="flex flex-wrap items-center gap-x-4 gap-y-1 py-3">
+                <Link href={`/admin/propostas/${p.id}`} className="min-w-0 flex-1 truncate font-bold hover:underline">
+                  {p.title}
+                </Link>
+                <span className="text-[13px] text-slate-500">
+                  {p.accepted_at
+                    ? `aceite a ${formatDate(p.accepted_at)}`
+                    : p.sent_at
+                      ? `enviada a ${formatDate(p.sent_at)}`
+                      : `criada a ${formatDate(p.created_at)}`}
+                </span>
+                <StatusPill tone={STATUS_TONE[p.status]}>{STATUS_LABEL[p.status]}</StatusPill>
+              </li>
+            ))}
+          </ul>
+        )}
+        <form action={createProposalAction} className="mt-4 flex flex-wrap gap-3 border-t border-slate-100 pt-4">
+          <input type="hidden" name="client_id" value={c.id} />
+          <input
+            name="title"
+            required
+            defaultValue={`Proposta de Paid Media · ${c.name}`}
+            className={`${inputClass} min-w-0 flex-1`}
+            aria-label="Título da nova proposta"
+          />
+          <button className={buttonClass}>Nova proposta</button>
+        </form>
+      </Card>
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         {/* Pendentes do cliente */}

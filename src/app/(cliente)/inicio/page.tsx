@@ -20,7 +20,13 @@ export default async function ClientHome() {
       supabase.from("client_kpis").select("*").eq("month", month).maybeSingle(),
       supabase.from("visible_tasks").select("id, name, status").neq("status", "complete").order("due_date").limit(6),
       supabase.from("reports").select("month, summary").order("month", { ascending: false }).limit(1).maybeSingle(),
-      supabase.from("proposals").select("title").eq("status", "enviada").limit(1).maybeSingle(),
+      supabase
+        .from("proposals")
+        .select("id, title")
+        .eq("status", "enviada")
+        .order("sent_at", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
     ]);
 
   if (!client) return <Empty>Não foi possível carregar os dados. Contacte a Bizzi Vision.</Empty>;
@@ -34,7 +40,7 @@ export default async function ClientHome() {
       kpis={kpis}
       tasks={tasks ?? []}
       report={report}
-      proposalTitle={proposal?.title ?? null}
+      proposal={proposal ?? null}
     />
   );
 }

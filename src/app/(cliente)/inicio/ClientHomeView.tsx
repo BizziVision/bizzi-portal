@@ -22,7 +22,7 @@ export function ClientHomeView({
   kpis,
   tasks,
   report,
-  proposalTitle,
+  proposal,
 }: {
   client: Client;
   firstName?: string;
@@ -31,7 +31,7 @@ export function ClientHomeView({
   kpis: Kpis | null;
   tasks: { id: string; name: string; status: string }[];
   report: { month: string; summary: string | null } | null;
-  proposalTitle: string | null;
+  proposal: { id: string; title: string } | null;
 }) {
   const pending = requests.filter((r) => r.status === "pendente");
 
@@ -53,12 +53,17 @@ export function ClientHomeView({
 
       <PhaseBar phase={client.phase} />
 
-      {proposalTitle && (
+      {proposal && (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border-l-4 border-yellow bg-white px-5 py-4">
           <p>
-            <strong>Tem uma proposta para rever:</strong> {proposalTitle}
+            <strong>Tem uma proposta para rever:</strong> {proposal.title}
           </p>
-          <span className="text-sm text-slate-500">Disponível em breve no portal</span>
+          <Link
+            href={`/proposta/${proposal.id}`}
+            className="rounded-md bg-navy px-4 py-2 text-[14px] font-bold text-white hover:bg-navy-500"
+          >
+            {canAct ? "Ver e aceitar" : "Ver proposta"}
+          </Link>
         </div>
       )}
 

@@ -5,6 +5,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   const profile = await requireStaff();
   const nav = [
     { href: "/admin", label: "Clientes" },
+    { href: "/admin/blocos", label: "Biblioteca de blocos" },
     ...(profile.role === "admin" ? [{ href: "/admin/clientes/novo", label: "Novo cliente" }] : []),
   ];
   return (
