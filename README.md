@@ -54,11 +54,11 @@ Portal em `portal.bizzi.vision`: Next.js (Vercel) + Supabase (UE, Frankfurt).
      select id, email, 'Bruno Barbosa', 'admin' from auth.users
      where email = 'bruno.barbosa@bizzi.vision';
      ```
-7. Mais tarde: Authentication → SMTP → ligar o Resend, para os emails saírem de `portal@bizzi.vision`
-   (o SMTP de teste do Supabase só envia poucos emails por hora).
+7. **Obrigatório antes de dar acesso a clientes:** Authentication → SMTP → ligar o Resend (smtp.resend.com, porta 465, utilizador `resend`), para os emails saírem de `portal@bizzi.vision`
+   (o serviço de email incluído no Supabase só envia para membros da equipa do projeto, cerca de 2 por hora).
 
 ### 2. Vercel
-1. Importar o repositório do GitHub (Pro, região das funções: Frankfurt `fra1`).
+1. Importar o repositório do GitHub (plano Pro). A região Frankfurt (`fra1`) já vem no `vercel.json`.
 2. Environment Variables (ver `.env.example`):
    `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`.
 3. Settings → Domains → `portal.bizzi.vision`.
